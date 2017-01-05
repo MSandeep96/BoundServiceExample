@@ -11,7 +11,7 @@ public class DateItem {
     @SerializedName("milliseconds_since_epoch")
     Long millis;
     String date;
-
+    boolean highlighted;
 
     @Override
     public String toString() {

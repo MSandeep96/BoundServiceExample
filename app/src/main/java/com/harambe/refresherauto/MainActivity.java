@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter {
             MyService.MyBinder binder=(MyService.MyBinder)iBinder;
             mService=binder.getServiceInterface();
             mService.setMainPresenter(MainActivity.this);
-            //Intent mInte=new Intent(MainActivity.this,MyService.class);
-            //startService(mInte);
         }
 
         @Override

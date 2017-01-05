@@ -30,9 +30,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
         holder.mTextItem.setText(myList.get(position).toString());
-        holder.mLineLayout.setBackgroundResource(R.drawable.highlight);
-        TransitionDrawable trans=(TransitionDrawable)holder.mLineLayout.getBackground();
-        trans.startTransition(2000);
+        if(!myList.get(position).highlighted) {
+            myList.get(position).highlighted=true;
+            holder.mLineLayout.setBackgroundResource(R.drawable.highlight);
+            TransitionDrawable trans = (TransitionDrawable) holder.mLineLayout.getBackground();
+            trans.startTransition(2000);
+        }
+    }
+
+    @Override
+    public void onViewRecycled(MainViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.mLineLayout.setBackgroundResource(R.drawable.normal_state);
     }
 
     @Override
