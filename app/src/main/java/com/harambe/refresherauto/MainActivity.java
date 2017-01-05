@@ -11,6 +11,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter {
     Toolbar toolbar;
     @BindView(R.id.cm_rv)
     RecyclerView recyclerView;
+    @BindView(R.id.scroll_prompt_cm)
+    Button mScrollPrmpt;
+
     LinearLayoutManager layoutManager;
 
     ServiceInterface mService;
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter {
         }
     };
     private MainAdapter mAdapter;
+    private boolean mWatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,18 @@ public class MainActivity extends AppCompatActivity implements MainPresenter {
         recyclerView.addItemDecoration(dividerItemDecoration);
         mAdapter=new MainAdapter();
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if(mWatch){
+                    if(layoutManager.findFirstVisibleItemPosition()!=0){
+                        updateScrollPrompt();
+                    }
+                }else{
+                    mScrollPrmpt.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -81,6 +99,26 @@ public class MainActivity extends AppCompatActivity implements MainPresenter {
     @Override
     public void addDateItem(DateItem dateItem) {
         mAdapter.addDateItem(dateItem);
+        if(layoutManager.findFirstCompletelyVisibleItemPosition()>0){
+            mWatch=true;
+            updateScrollPrompt();
+        }
+    }
+
+    private void updateScrollPrompt() {
+        int itemsAval=layoutManager.findFirstCompletelyVisibleItemPosition();
+        String prompt;
+        if(itemsAval==1){
+            prompt=itemsAval+" new item!";
+        }else{
+            prompt=itemsAval+" new items!";
+        }
+        mScrollPrmpt.setText(prompt);
+        mScrollPrmpt.setVisibility(View.VISIBLE);
+    }
+
+    public void onScrollClicked(View view) {
         layoutManager.scrollToPosition(0);
+        mScrollPrmpt.setVisibility(View.GONE);
     }
 }

@@ -49,7 +49,7 @@ public class MyService extends Service implements ServiceInterface {
             public void run() {
                 mDataLayer.fetchTime(MyService.this);
                 if(bound){
-                    mHandler.postDelayed(this,5000);
+                    mHandler.postDelayed(this,10000);
                 }
             }
         });
